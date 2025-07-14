@@ -1,0 +1,32 @@
+[
+  {
+    "id": 1,
+    "name": "Software Fellow 1",
+    "age": 20
+  },
+  {
+    "id": 2,
+    "name": "Software Fellow 2",
+    "age": 19
+  },
+  {
+    "id": 3,
+    "name": "Software Fellow 3",
+    "age": 21
+  },
+  {
+    "id": 4,
+    "name": "Software Fellow 4",
+    "age": 22
+  },
+  {
+    "id": 5,
+    "name": "Software Fellow 5",
+    "age": 23
+  },
+  {
+    "id": 6,
+    "name": "Gorkhe",
+    "age": 20
+  }
+]
