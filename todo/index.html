@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Simple ToDo App</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background-color: #f7f9fc;
+      display: flex;
+      justify-content: center;
+      padding: 40px;
+    }
+
+    .container {
+      background-color: #ffffff;
+      padding: 30px 40px;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      width: 100%;
+      max-width: 500px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #333;
+      margin-bottom: 20px;
+    }
+
+    input[type="text"] {
+      width: 70%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+
+    button {
+      padding: 10px 16px;
+      margin-left: 8px;
+      background-color: #3b82f6;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 15px;
+    }
+
+    button:hover {
+      background-color: #2563eb;
+    }
+
+    ul {
+      margin-top: 20px;
+      padding: 0;
+      list-style-type: none;
+    }
+
+    li {
+      background: #e0f2fe;
+      margin-bottom: 10px;
+      padding: 10px 14px;
+      border-radius: 8px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .delete-btn {
+      background-color: #ef4444;
+      border: none;
+      color: white;
+      padding: 6px 10px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .delete-btn:hover {
+      background-color: #dc2626;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>📝 My ToDo List</h1>
+    <input type="text" id="task" placeholder="Enter a task" />
+    <button onclick="addTodo()">Add</button>
+
+    <ul id="todo-list"></ul>
+  </div>
+
+  <script>
+    async function fetchTodos() {
+      const res = await fetch('http://127.0.0.1:8000/todos');
+      const todos = await res.json();
+      const list = document.getElementById('todo-list');
+      list.innerHTML = '';
+      todos.forEach(todo => {
+        const li = document.createElement('li');
+        li.innerHTML = `
+          ${todo.task}
+          <button class="delete-btn" onclick="deleteTodo(${todo.id})">Delete</button>
+        `;
+        list.appendChild(li);
+      });
+    }
+
+    async function addTodo() {
+      const taskInput = document.getElementById('task');
+      const task = taskInput.value.trim();
+      if (task === '') return;
+      await fetch('http://127.0.0.1:8000/todos', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ task })
+      });
+      taskInput.value = '';
+      fetchTodos();
+    }
+
+    async function deleteTodo(id) {
+      await fetch(`http://127.0.0.1:8000/todos/${id}`, {
+        method: 'DELETE'
+      });
+      fetchTodos();
+    }
+
+    fetchTodos();
+  </script>
+</body>
+</html>
